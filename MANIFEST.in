@@ -1,0 +1,13 @@
+include README.md
+include QUICKSTART.md
+include USAGE_GUIDE.md
+include PROJECT_SUMMARY.md
+include WORKFLOW.md
+include CHANGELOG.md
+include LICENSE
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+include SECURITY.md
+include requirements.txt
+include .env.example
+recursive-include .github *

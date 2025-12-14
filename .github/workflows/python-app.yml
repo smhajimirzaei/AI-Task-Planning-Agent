@@ -11,6 +11,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.9', '3.10', '3.11', '3.12']
@@ -25,12 +26,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python -m pip install --upgrade pip setuptools wheel
         pip install -r requirements.txt
+        pip install flake8 black mypy pytest
 
     - name: Lint with flake8
       run: |
-        pip install flake8
         # Stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # Exit-zero treats all errors as warnings
@@ -39,13 +40,11 @@ jobs:
 
     - name: Check code formatting with black
       run: |
-        pip install black
         black --check .
       continue-on-error: true
 
     - name: Type checking with mypy
       run: |
-        pip install mypy
         mypy . --ignore-missing-imports
       continue-on-error: true
 
@@ -54,3 +53,4 @@ jobs:
         python -c "from agent import AITaskPlanningAgent"
         python -c "from models import Task, CalendarEvent, UserProfile"
         python -c "from services import AIPlannerService, CalendarService, PreferenceLearner"
+      continue-on-error: false

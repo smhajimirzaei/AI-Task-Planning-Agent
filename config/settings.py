@@ -8,7 +8,10 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     # API Keys
-    anthropic_api_key: str
+    ai_provider: str = "anthropic"  # Options: anthropic, openai, google
+    anthropic_api_key: Optional[str] = None
+    openai_api_key: Optional[str] = None
+    google_api_key: Optional[str] = None
 
     # Google Calendar
     google_calendar_credentials: str = "credentials.json"

@@ -61,8 +61,8 @@ class UserProfile(BaseModel):
         default_factory=WorkingHoursPreference
     )
     preferred_calendar: str = Field(
-        default="google",
-        description="Preferred calendar: google, outlook"
+        default="text",
+        description="Calendar type: text (conversational), google, outlook"
     )
 
     # Task Preferences

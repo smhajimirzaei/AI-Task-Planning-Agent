@@ -85,10 +85,11 @@ def initialize_agent(user_id: str, provider: str = "anthropic", api_key: str = N
                 self.ai_planner = AIPlannerService(provider=provider, api_key=api_key, model_name=model_name)
 
                 # Import other services
-                from services.calendar_service import CalendarService
+                from services.text_calendar_service import TextCalendarService
                 from services.preference_learner import PreferenceLearner
 
-                self.calendar_service = CalendarService(provider=self.user_profile.preferred_calendar)
+                # Use text-based calendar service (no external API integration)
+                self.calendar_service = TextCalendarService(user_id=user_id, db_manager=self.db)
                 self.preference_learner = PreferenceLearner()
                 self.monitoring_active = False
                 self.monitoring_thread = None
@@ -101,15 +102,24 @@ def initialize_agent(user_id: str, provider: str = "anthropic", api_key: str = N
                 return task
 
             def list_tasks(self, status=None):
-                return self.db.get_tasks(self.user_id, status=status)
+                # Use get_all_tasks instead of get_tasks
+                return self.db.get_all_tasks(status=status)
 
             def mark_task_in_progress(self, task_id):
                 from models import TaskStatus
-                return self.db.update_task_status(task_id, TaskStatus.IN_PROGRESS)
+                task = self.db.get_task(task_id)
+                if task:
+                    task.status = TaskStatus.IN_PROGRESS
+                    return self.db.save_task(task)
+                return None
 
             def mark_task_completed(self, task_id):
                 from models import TaskStatus
-                return self.db.update_task_status(task_id, TaskStatus.COMPLETED)
+                task = self.db.get_task(task_id)
+                if task:
+                    task.status = TaskStatus.COMPLETED
+                    return self.db.save_task(task)
+                return None
 
             def generate_plan(self, start_date=None, end_date=None, context=None):
                 from datetime import datetime, timedelta
@@ -126,24 +136,25 @@ def initialize_agent(user_id: str, provider: str = "anthropic", api_key: str = N
                 return self.ai_planner.refine_plan(feedback, current_plan)
 
             def execute_plan(self, plan):
-                from models import CalendarEvent, EventType
                 from datetime import datetime
-                events = []
-                for scheduled_task in plan.get('scheduled_tasks', []):
-                    event = CalendarEvent(
-                        calendar_id=self.user_profile.preferred_calendar,
-                        title=scheduled_task['title'],
-                        description=f"Task: {scheduled_task['task_id']}",
-                        start_time=datetime.fromisoformat(scheduled_task['scheduled_start']),
-                        end_time=datetime.fromisoformat(scheduled_task['scheduled_end']),
-                        event_type=EventType.SCHEDULED_TASK
-                    )
-                    self.calendar_service.create_event(event)
-                    events.append(event)
+                # Create events using text calendar service
+                events = self.calendar_service.create_events_from_plan(plan.get('scheduled_tasks', []))
                 return events
 
             def get_insights(self):
                 return self.preference_learner.get_insights(self.user_id, self.db)
+
+            def update_schedule(self, schedule_text, week_start=None):
+                """Update weekly schedule from text"""
+                return self.calendar_service.update_schedule_from_text(schedule_text, week_start)
+
+            def get_schedule_summary(self, start_date=None, days=7):
+                """Get text summary of schedule"""
+                return self.calendar_service.get_schedule_summary(start_date, days)
+
+            def record_completion(self, task_id, completion_text, completion_date=None):
+                """Record actual task completion"""
+                return self.calendar_service.record_actual_completion(task_id, completion_text, completion_date)
 
         agent = CustomAgent(user_id, provider, api_key, model_name)
         return agent, None
@@ -272,7 +283,7 @@ with st.sidebar:
         st.header("📋 Navigation")
         page = st.radio(
             "Select Page",
-            ["💬 Chat", "📝 Tasks", "📅 Planning", "📊 Insights"],
+            ["💬 Chat", "📝 Tasks", "🗓️ Schedule", "📅 Planning", "📊 Insights"],
             label_visibility="collapsed"
         )
     else:
@@ -283,32 +294,51 @@ if not st.session_state.configured:
     # Welcome screen
     st.title("Welcome to AI Task Planning Agent 🤖")
     st.markdown("""
-    ### Your AI-Powered Productivity Assistant
+    ### Your Conversational AI Productivity Assistant
 
-    This intelligent agent helps you:
+    This intelligent agent helps you through natural conversation:
     - 📝 **Manage tasks** with AI-powered prioritization
-    - 📅 **Generate optimal schedules** based on your preferences
-    - 🔄 **Adapt and learn** from your work patterns
-    - 📊 **Track insights** and improve productivity
-    - 🗓️ **Integrate with calendars** (Google Calendar, Outlook)
+    - 🗓️ **Share your schedule** conversationally (no calendar integration needed)
+    - 📅 **Generate optimal plans** based on your availability and preferences
+    - 🔄 **Learn from your feedback** about what actually happened
+    - 📊 **Track insights** and improve productivity week by week
+
+    ---
+
+    ### How It Works
+
+    1. **Share Your Schedule**: Tell the agent about your week in plain text
+       - "Monday I have meetings 9-11am, Tuesday is mostly free..."
+
+    2. **Add Your Tasks**: Describe what you need to accomplish
+
+    3. **Get AI Plans**: The agent creates an optimal schedule around your commitments
+
+    4. **Weekly Review**: At week's end, tell the agent what you actually did
+       - The agent learns from the differences to improve future plans
 
     ---
 
     ### Getting Started
 
-    1. **Get an API Key**: Sign up at [console.anthropic.com](https://console.anthropic.com/)
-    2. **Configure**: Enter your API key in the sidebar
-    3. **Start Planning**: Add tasks and let AI optimize your schedule!
+    1. **Get an API Key**: Choose your preferred provider:
+       - Anthropic Claude: [console.anthropic.com](https://console.anthropic.com/)
+       - OpenAI ChatGPT: [platform.openai.com](https://platform.openai.com/)
+       - Google Gemini: [ai.google.dev](https://ai.google.dev/) (free tier available!)
+
+    2. **Configure**: Select provider and enter API key in the sidebar
+
+    3. **Start Planning**: Share your schedule and add tasks!
 
     ---
 
-    ### Features
+    ### Key Features
 
-    - **Natural Language Chat**: Talk to your agent naturally
-    - **Smart Scheduling**: AI considers priorities, deadlines, and focus requirements
-    - **Real-time Monitoring**: Track schedule adherence and trigger replanning
-    - **Adaptive Learning**: Gets smarter as it learns your preferences
-    - **Calendar Sync**: Integrates with your existing calendar
+    - **💬 Conversational Interface**: No complex forms or integrations
+    - **🧠 Smart Learning**: Improves from your weekly feedback
+    - **📊 Visual Plans**: See your schedule and plans clearly
+    - **🎯 Flexible**: Works entirely through text - no calendar API needed
+    - **🤖 Multi-Provider**: Choose Claude, ChatGPT, or Gemini
 
     👈 **Configure your agent in the sidebar to begin!**
     """)
@@ -506,6 +536,126 @@ else:
                             st.rerun()
         else:
             st.info("No tasks found. Add your first task above!")
+
+    # ==================== SCHEDULE PAGE ====================
+    elif page == "🗓️ Schedule":
+        st.title("🗓️ Weekly Schedule Management")
+        st.markdown("Share your weekly schedule through conversation and visualize your plans.")
+
+        # Schedule input section
+        st.subheader("📥 Update Your Weekly Schedule")
+        st.markdown("Tell me about your weekly schedule in natural language. Include meetings, commitments, and any fixed time blocks.")
+
+        with st.form("schedule_input_form"):
+            schedule_text = st.text_area(
+                "Describe your schedule for this week",
+                placeholder="""Example:
+Monday: Team meeting 9-10am, lunch 12-1pm, client call 3-4pm
+Tuesday: Free morning, workshop 2-5pm
+Wednesday: All day conference
+Thursday: Morning meetings 9-11am, afternoon free
+Friday: Sprint planning 10-11am, rest of day flexible
+Weekend: Personal time, no work""",
+                height=200
+            )
+
+            week_start_date = st.date_input(
+                "Week starting from",
+                value=datetime.now().date() - timedelta(days=datetime.now().weekday())
+            )
+
+            submit_schedule = st.form_submit_button("💾 Update Schedule", use_container_width=True)
+
+            if submit_schedule and schedule_text:
+                try:
+                    week_start = datetime.combine(week_start_date, datetime.min.time())
+                    result = agent.update_schedule(schedule_text, week_start)
+                    st.success(f"✅ {result['message']}")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error updating schedule: {e}")
+
+        st.markdown("---")
+
+        # Schedule visualization section
+        st.subheader("📊 Current Schedule View")
+
+        col1, col2 = st.columns([2, 1])
+
+        with col1:
+            # Get schedule summary
+            try:
+                summary = agent.get_schedule_summary(days=7)
+                st.markdown(summary)
+            except Exception as e:
+                st.info("No schedule data available. Update your schedule above.")
+
+        with col2:
+            st.subheader("Quick Stats")
+            try:
+                from datetime import datetime, timedelta
+                start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                events = agent.calendar_service.get_events(start, start + timedelta(days=7))
+
+                st.metric("Scheduled Events", len(events))
+                st.metric("This Week", f"{start.strftime('%b %d')} - {(start + timedelta(days=6)).strftime('%b %d')}")
+
+            except Exception as e:
+                st.info("Add schedule data to see stats")
+
+        st.markdown("---")
+
+        # Weekly review section
+        st.subheader("📝 Weekly Review")
+        st.markdown("At the end of the week, share what you actually did vs what was planned.")
+
+        with st.expander("📋 Record What You Actually Did"):
+            with st.form("completion_record_form"):
+                st.markdown("Tell me about what you actually accomplished this week, even if it differed from the plan.")
+
+                completion_text = st.text_area(
+                    "What did you actually do?",
+                    placeholder="""Example:
+Monday: Completed the team meeting as planned, but the client call got rescheduled
+Tuesday: Attended workshop but only until 3pm due to urgent issue
+Wednesday: Conference went well, learned a lot about new frameworks
+Thursday: Morning meetings ran long until noon, worked on project in afternoon
+Friday: Sprint planning was productive, spent afternoon on documentation
+Weekend: Did some light work on Saturday morning""",
+                    height=200
+                )
+
+                week_review_date = st.date_input(
+                    "Week ending",
+                    value=datetime.now().date()
+                )
+
+                submit_review = st.form_submit_button("💾 Record Completion", use_container_width=True)
+
+                if submit_review and completion_text:
+                    try:
+                        # Store the review for learning
+                        st.session_state.chat_history.append({
+                            "role": "user",
+                            "content": f"Weekly Review for week ending {week_review_date}:\n\n{completion_text}"
+                        })
+
+                        # Get AI feedback
+                        response = agent.ai_planner.chat(
+                            f"I'm sharing my weekly review. Please analyze what I actually did vs what might have been planned, and help me learn from this:\n\n{completion_text}"
+                        )
+
+                        st.session_state.chat_history.append({
+                            "role": "assistant",
+                            "content": response
+                        })
+
+                        st.success("✅ Weekly review recorded!")
+                        st.markdown("### AI Feedback:")
+                        st.markdown(response)
+
+                    except Exception as e:
+                        st.error(f"Error recording review: {e}")
 
     # ==================== PLANNING PAGE ====================
     elif page == "📅 Planning":

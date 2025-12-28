@@ -2,93 +2,135 @@
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Powered by Claude](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange)](https://www.anthropic.com/)
+[![Multi-Provider AI](https://img.shields.io/badge/AI-Claude%20%7C%20ChatGPT%20%7C%20Gemini-orange)](https://www.anthropic.com/)
+[![Streamlit](https://img.shields.io/badge/UI-Streamlit-red)](https://streamlit.io/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-An intelligent AI-powered personal task planning and scheduling assistant that learns your habits and preferences over time.
+An intelligent AI-powered personal task planning and scheduling assistant that learns your habits and preferences through natural conversation. Works with Claude, ChatGPT, or Gemini - no calendar API integration required!
 
 ## Overview
 
-This agent helps you manage your tasks by:
-- **Planning**: Generates optimal schedules using AI (Claude)
-- **Learning**: Adapts to your working patterns and preferences
-- **Monitoring**: Tracks your progress in real-time
-- **Replanning**: Dynamically adjusts when life happens
+This agent helps you manage your tasks through **natural conversation**:
+- **💬 Conversational Interface**: Share your schedule and tasks through simple text
+- **🤖 AI Planning**: Generates optimal schedules using Claude, ChatGPT, or Gemini
+- **🧠 Adaptive Learning**: Learns from your weekly feedback to improve future plans
+- **📊 Visual Interface**: Beautiful Streamlit UI for easy interaction
+- **🔒 Privacy-First**: No calendar API access needed - you control what you share
 
-## Key Features
+## ✨ Key Features
 
-### 🤖 AI-Powered Planning
-- Analyzes tasks, deadlines, priorities, and calendar
-- Generates optimal schedules based on your preferences
-- Proposes plans for your review and iterative refinement
-- Learns from every interaction
+### 🎨 Streamlit Web Interface
+- **Easy Setup**: Paste your API key and start planning in seconds
+- **Multiple Pages**: Chat, Tasks, Schedule, Planning, Insights
+- **Visual Dashboard**: See your schedule and plans clearly
+- **Provider Selection**: Switch between Claude, ChatGPT, and Gemini anytime
+- **Responsive Design**: Works on desktop and mobile
 
-### 📅 Calendar Integration
-- Syncs with Google Calendar and Outlook
-- Reads existing meetings and events
-- Schedules tasks in available time slots
-- Maintains real-time synchronization
+### 🤖 Multi-Provider AI Support
+- **Anthropic Claude**: Best reasoning and detailed planning
+  - Claude Sonnet 4.5, Opus 4.5, Claude 3.5 Sonnet
+- **OpenAI ChatGPT**: Fast responses and great performance
+  - GPT-4o, GPT-4o-mini, GPT-4 Turbo, GPT-3.5 Turbo
+- **Google Gemini**: Free tier available, multimodal capabilities
+  - Gemini 2.0 Flash, Gemini 1.5 Pro, Gemini 1.5 Flash
+
+### 🗓️ Conversational Calendar
+- **No API Integration**: Share schedule through natural language text
+- **Full Privacy**: Your actual calendar stays private
+- **Weekly Updates**: Tell the agent about your week in plain text
+- **Visual Plans**: See your commitments and scheduled tasks clearly
+- **Learning Loop**: Report what actually happened for continuous improvement
 
 ### 🧠 Adaptive Learning
-- Tracks actual vs estimated task duration
-- Learns your productive hours
-- Identifies working patterns
-- Adjusts recommendations over time
-
-### 🔄 Dynamic Replanning
-- Monitors schedule adherence
-- Detects deviations automatically
-- Triggers replanning when needed
-- Adapts to changes in real-time
+- **Weekly Reviews**: Compare planned vs actual completion
+- **Pattern Recognition**: Learns your productive hours and work patterns
+- **Improved Estimates**: Adjusts time predictions based on your feedback
+- **Personalized Plans**: Gets better at planning for you over time
 
 ### 📊 Insights & Analytics
-- Productivity patterns
-- Schedule adherence metrics
-- Personalized recommendations
-- Continuous improvement tracking
+- **Productivity Patterns**: Understand when you work best
+- **Task Analysis**: Track completion rates and time estimates
+- **Personalized Recommendations**: Get AI-powered suggestions
+- **Progress Tracking**: Monitor your improvement week by week
 
-## Quick Start
+## 🚀 Quick Start
 
-**Get started in 5 minutes!** See [QUICKSTART.md](QUICKSTART.md)
+### Option 1: Streamlit Web UI (Recommended)
+
+```bash
+# 1. Clone and install
+git clone <repository-url>
+cd AI_Agent
+pip install -r requirements.txt
+
+# 2. Run Streamlit app
+python -m streamlit run streamlit_app.py
+
+# 3. Configure in browser
+# - Select AI provider (Claude/ChatGPT/Gemini)
+# - Paste your API key
+# - Choose model
+# - Start planning!
+```
+
+**Get your API key:**
+- Anthropic Claude: [console.anthropic.com](https://console.anthropic.com/)
+- OpenAI ChatGPT: [platform.openai.com](https://platform.openai.com/)
+- Google Gemini: [ai.google.dev](https://ai.google.dev/) *(Free tier available!)*
+
+### Option 2: Command Line Interface
 
 ```bash
 # 1. Install
 pip install -r requirements.txt
 
-# 2. Configure (add your Anthropic API key)
+# 2. Configure
 cp .env.example .env
+# Edit .env with your API key
 
-# 3. Setup
+# 3. Run
 python main.py setup
-
-# 4. Add tasks
 python main.py add-task "Your task" --priority high --duration 2
-
-# 5. Generate plan
 python main.py plan
 ```
 
-## Documentation
+## 📚 Documentation
 
+- **[Streamlit UI Guide](STREAMLIT_README.md)** - Web interface documentation
+- **[Multi-Provider Setup](MULTI_PROVIDER_README.md)** - Claude, ChatGPT, Gemini configuration
+- **[Conversational Calendar](CONVERSATIONAL_CALENDAR_README.md)** - Text-based schedule sharing
 - **[Quick Start Guide](QUICKSTART.md)** - Get running in 5 minutes
-- **[Usage Guide](USAGE_GUIDE.md)** - Comprehensive documentation
+- **[Usage Guide](USAGE_GUIDE.md)** - Comprehensive CLI documentation
 - **[Example Usage](example_usage.py)** - Code examples
 
-## Installation
+## 💻 Installation
 
 ### Prerequisites
-- Python 3.9+
-- Anthropic API key ([Get one here](https://console.anthropic.com/))
-- Google Calendar API credentials (optional, for calendar sync)
+- **Python 3.9+** (Python 3.13 recommended)
+- **AI Provider API Key** (choose one):
+  - Anthropic Claude ([Get key](https://console.anthropic.com/))
+  - OpenAI ChatGPT ([Get key](https://platform.openai.com/))
+  - Google Gemini ([Get key](https://ai.google.dev/)) - Free tier available!
 
 ### Install Dependencies
 
 ```bash
+# Using Python 3.13 (or your preferred version)
+py -3.13 -m pip install -r requirements.txt
+
+# Or standard pip
 pip install -r requirements.txt
 ```
 
-### Configuration
+### Configuration Methods
 
+#### Method 1: Streamlit UI (Easiest)
+Just run the app and configure through the web interface:
+```bash
+python -m streamlit run streamlit_app.py
+```
+
+#### Method 2: Environment File
 1. Create `.env` file:
 ```bash
 cp .env.example .env
@@ -96,36 +138,83 @@ cp .env.example .env
 
 2. Edit `.env`:
 ```env
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-GOOGLE_CALENDAR_CREDENTIALS=credentials.json
+# Choose your provider
+AI_PROVIDER=anthropic  # Options: anthropic, openai, google
+
+# Add your API key
+ANTHROPIC_API_KEY=your_key_here
+# OR
+OPENAI_API_KEY=your_key_here
+# OR
+GOOGLE_API_KEY=your_key_here
+
+# Choose model
+MODEL_NAME=claude-sonnet-4-5-20250929
 ```
 
-3. (Optional) Set up Google Calendar:
-   - Follow [Google Calendar API setup](https://developers.google.com/calendar/api/quickstart/python)
-   - Download credentials.json to project root
-
-## Project Structure
+## 📁 Project Structure
 
 ```
-ai_agent/
-├── main.py                 # Entry point
-├── models/                 # Data models
-│   ├── task.py
-│   ├── calendar_event.py
-│   └── user_profile.py
+AI_Agent/
+├── streamlit_app.py                    # Streamlit web UI (main interface)
+├── main.py                             # CLI entry point
+├── agent.py                            # Core agent logic
+├── models/                             # Data models
+│   ├── task.py                         # Task model
+│   ├── calendar_event.py               # Calendar event model
+│   └── user_profile.py                 # User profile & preferences
 ├── services/
-│   ├── calendar_service.py
-│   ├── ai_planner.py
-│   └── preference_learner.py
+│   ├── ai_planner_multi.py            # Multi-provider AI service (NEW!)
+│   ├── text_calendar_service.py       # Conversational calendar (NEW!)
+│   ├── calendar_service.py            # External calendar integration
+│   └── preference_learner.py          # Learning engine
 ├── database/
-│   └── db_manager.py
+│   └── db_manager.py                   # SQLite database management
 ├── config/
-│   └── settings.py
-└── utils/
-    └── helpers.py
+│   └── settings.py                     # Configuration & settings
+└── docs/
+    ├── STREAMLIT_README.md             # Streamlit UI guide
+    ├── MULTI_PROVIDER_README.md        # Multi-provider setup
+    └── CONVERSATIONAL_CALENDAR_README.md  # Calendar guide
 ```
 
-## Usage
+## 🎯 Usage
+
+### Streamlit Web Interface (Recommended)
+
+```bash
+# Start the app
+python -m streamlit run streamlit_app.py
+
+# Open browser to http://localhost:8501
+```
+
+**Using the Interface:**
+
+1. **💬 Chat Page** - Talk with your AI assistant
+   - Discuss tasks and priorities
+   - Ask for scheduling advice
+   - Get personalized recommendations
+
+2. **📝 Tasks Page** - Manage your tasks
+   - Add tasks with priorities and deadlines
+   - Track task status
+   - Mark tasks complete or in-progress
+
+3. **🗓️ Schedule Page** - Share your weekly schedule
+   - Describe your week in natural language
+   - View visual schedule summary
+   - Record weekly reviews for learning
+
+4. **📅 Planning Page** - Generate AI plans
+   - Create optimal schedules
+   - Refine plans with feedback
+   - Execute and track plans
+
+5. **📊 Insights Page** - View analytics
+   - Productivity patterns
+   - Task completion rates
+   - Personalized recommendations
 
 ### Command Line Interface
 
@@ -134,23 +223,13 @@ ai_agent/
 python main.py add-task "Complete project report" \
   --priority high \
   --duration 3.5 \
-  --deadline 2025-12-20 \
-  --deep-focus
+  --deadline 2025-12-20
 
 # List tasks
 python main.py list-tasks
 
 # Generate AI plan
 python main.py plan --days 14
-
-# Mark task complete
-python main.py complete <task_id>
-
-# Monitor schedule
-python main.py monitor
-
-# View insights
-python main.py insights
 
 # Interactive mode
 python main.py interactive
@@ -200,86 +279,112 @@ agent.mark_task_completed(task_id)
 insights = agent.get_insights()
 ```
 
-## How It Works
+## 🔄 How It Works
 
-### 1. You Define Tasks
-Provide tasks with descriptions, priorities, deadlines, and time estimates.
+### Conversational Workflow
 
-### 2. Agent Reads Your Calendar
-Fetches existing meetings and events from Google Calendar or Outlook.
+#### 1. **Share Your Weekly Schedule** 🗓️
+Tell the agent about your week in natural language:
+```
+Monday: Team meeting 9-10am, lunch 12-1pm, gym 6-7pm
+Tuesday: Free morning, workshop 2-5pm
+Wednesday: All-day conference
+Thursday: Meetings 9-11am, rest of day flexible
+Friday: Sprint planning 10-11am, afternoon for deep work
+```
 
-### 3. AI Generates Optimal Plan
-Claude analyzes everything and creates a realistic, optimized schedule considering:
+#### 2. **Add Your Tasks** 📝
+Define what you need to accomplish:
+- Task descriptions
+- Priorities (high, medium, low)
+- Estimated durations
+- Deadlines
+- Special requirements
+
+#### 3. **Get AI-Generated Plans** 🤖
+The AI analyzes everything and creates an optimal schedule considering:
+- Your availability from shared schedule
 - Task priorities and deadlines
-- Your calendar availability
-- Working hours and preferences
 - Learned productivity patterns
-- Task dependencies
+- Deep focus requirements
+- Work-life balance
 
-### 4. Interactive Refinement
-Review the plan and provide feedback. The agent refines it based on your input and learns your preferences.
+#### 4. **Refine and Execute** ✅
+- Review the AI's proposed plan
+- Provide feedback for refinement
+- Execute the plan that works for you
 
-### 5. Plan Execution
-Tasks are scheduled on your calendar with proper time blocks.
+#### 5. **Weekly Review** 📊
+At week's end, share what actually happened:
+```
+Monday: Meeting went well, but gym was skipped
+Tuesday: Workshop ended early at 4pm, used extra time for project work
+Wednesday: Conference was valuable, made great connections
+...
+```
 
-### 6. Real-Time Monitoring
-The agent tracks your progress, comparing actual vs planned completion times.
+#### 6. **Continuous Learning** 🧠
+The AI learns from your feedback:
+- Adjusts time estimates based on actual completion
+- Identifies your productive hours
+- Understands your work patterns
+- Improves future planning recommendations
 
-### 7. Adaptive Learning
-- Learns your productive hours
-- Adjusts time estimates
-- Improves future plans
-- Adapts to your working style
+## 🏗️ Architecture
 
-### 8. Dynamic Replanning
-When you deviate from schedule (we all do!), the agent automatically replans remaining tasks.
-
-## Architecture
-
-### Components
+### System Components
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                    User Interface                   │
-│            (CLI / Interactive / Python API)         │
+│              User Interfaces                        │
+│  • Streamlit Web UI (Primary)                      │
+│  • Command Line Interface                          │
+│  • Python API                                      │
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
 │              AI Planning Agent                      │
 │  ┌──────────────────────────────────────────────┐  │
-│  │         AI Planner (Claude)                  │  │
-│  │  • Generate plans                            │  │
-│  │  • Refine with feedback                      │  │
-│  │  • Analyze deviations                        │  │
+│  │    Multi-Provider AI Planner                 │  │
+│  │  • Anthropic Claude (Sonnet/Opus)           │  │
+│  │  • OpenAI ChatGPT (GPT-4o/mini)             │  │
+│  │  • Google Gemini (Flash/Pro)                │  │
+│  │  • Generate & refine plans                   │  │
+│  │  • Natural language chat                     │  │
+│  └──────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────┐  │
+│  │    Text Calendar Service (NEW!)              │  │
+│  │  • Conversational schedule sharing          │  │
+│  │  • No external API integration              │  │
+│  │  • Weekly review & learning                 │  │
 │  └──────────────────────────────────────────────┘  │
 │  ┌──────────────────────────────────────────────┐  │
 │  │       Preference Learner                     │  │
-│  │  • Learn from completions                    │  │
-│  │  • Track patterns                            │  │
-│  │  • Update profile                            │  │
-│  └──────────────────────────────────────────────┘  │
-│  ┌──────────────────────────────────────────────┐  │
-│  │       Calendar Service                       │  │
-│  │  • Google Calendar                           │  │
-│  │  • Outlook Calendar                          │  │
-│  │  • Event management                          │  │
+│  │  • Learn from weekly reviews                │  │
+│  │  • Track productivity patterns              │  │
+│  │  • Update user profile                      │  │
 │  └──────────────────────────────────────────────┘  │
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
 │              Database (SQLite)                      │
 │  • Tasks  • Events  • User Profile  • History      │
+│  • All data stored locally - full privacy          │
 └─────────────────────────────────────────────────────┘
 ```
 
 ### Tech Stack
 
-- **AI**: Claude 4 Sonnet (Anthropic API)
-- **Language**: Python 3.9+
-- **Calendar APIs**: Google Calendar API, Microsoft Graph API
-- **Database**: SQLite (easy upgrade to PostgreSQL)
-- **CLI**: Typer + Rich
-- **Data Models**: Pydantic
+- **AI Providers**:
+  - Anthropic Claude (claude-sonnet-4-5, claude-opus-4-5)
+  - OpenAI ChatGPT (gpt-4o, gpt-4o-mini)
+  - Google Gemini (gemini-2.0-flash-exp, gemini-1.5-pro)
+- **Web UI**: Streamlit 1.40+
+- **Language**: Python 3.9+ (3.13 recommended)
+- **Database**: SQLite (portable, no setup required)
+- **CLI**: Typer + Rich (for command-line interface)
+- **Data Models**: Pydantic (type-safe data validation)
+- **AI SDKs**: anthropic, openai, google-generativeai
 
 ## Advanced Features
 
@@ -371,16 +476,28 @@ The agent learns from:
 - Adherence rate
 - Task estimation accuracy
 
-## Roadmap
+## 🎯 What's New in v2.0
 
-- [ ] Web UI interface
-- [ ] Mobile notifications
+### ✅ Recently Added
+- **Streamlit Web UI** - Beautiful, responsive interface
+- **Multi-Provider AI** - Support for Claude, ChatGPT, and Gemini
+- **Conversational Calendar** - Share schedule through text (no API integration)
+- **Weekly Review System** - Report actual completion for learning
+- **Provider Switching** - Change AI provider anytime
+- **Visual Dashboard** - Clear visualization of schedule and plans
+
+### 🚀 Roadmap
+
+- [ ] Enhanced AI schedule parsing (better natural language understanding)
+- [ ] Calendar export (.ics files)
+- [ ] Mobile-optimized interface
 - [ ] Team collaboration features
-- [ ] Integration with project management tools (Jira, Asana)
+- [ ] Integration with project management tools (Jira, Asana, Trello)
 - [ ] Voice interface
 - [ ] Slack/Discord bot
 - [ ] Advanced analytics dashboard
-- [ ] Multi-user support
+- [ ] Pattern recognition for recurring events
+- [ ] Smart notifications
 
 ## Contributing
 

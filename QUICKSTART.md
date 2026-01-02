@@ -470,4 +470,8 @@ This demonstrates all features with sample tasks.
 
 The agent learns from every task and gets smarter over time. Start simple, provide feedback, and watch your productivity improve week by week.
 
+---
+
 **Happy Planning!** 🎯
+
+For questions or issues, visit the [GitHub repository](https://github.com/smhajimirzaei/AI-Task-Planning-Agent).

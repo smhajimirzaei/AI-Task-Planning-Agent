@@ -544,39 +544,24 @@ MIT License - see LICENSE file for details
 
 ## Acknowledgments
 
-This project was built with:
-- **AI Planning**: Powered by [Anthropic Claude](https://www.anthropic.com/) for intelligent task scheduling
-- **Calendar Integration**: Google Calendar API and Microsoft Graph API
-- **Development**: Python with modern libraries (Pydantic, SQLAlchemy, Typer, Rich)
-
-### Built with Claude Code
-
-This entire project was developed with the assistance of [Claude Code](https://claude.ai/claude-code), Anthropic's AI-powered coding assistant. Claude Code helped with:
-- Architecture design and implementation
-- Writing clean, well-documented code
-- Creating comprehensive documentation
-- Implementing best practices and patterns
-- Building a production-ready system from concept to completion
-
-Special thanks to the Anthropic team for creating such powerful AI tools that enable rapid development of sophisticated applications.
+Built with modern Python libraries and AI technologies:
+- **AI Planning**: Multi-provider support (Anthropic, OpenAI, Google)
+- **Web Framework**: Streamlit for beautiful, responsive UI
+- **Database**: SQLAlchemy with SQLite for local data storage
+- **CLI**: Typer with Rich formatting
+- **Data Validation**: Pydantic for type-safe models
 
 ---
 
 ## Project Stats
 
-- **~3,000 lines** of Python code
-- **17 modules** with clean separation of concerns
-- **5 comprehensive guides** and documentation files
-- **Production-ready** with error handling and validation
-- **Extensible architecture** for easy feature additions
+- **Clean Architecture** with separation of concerns
+- **Comprehensive Documentation** with detailed guides
+- **Production-Ready** with error handling and validation
+- **Extensible Design** for easy feature additions
+- **Privacy-First** approach with local data storage
 
 ---
-
-**Start planning smarter today!** 🚀
-
-```bash
-python main.py setup
-```
 
 ## Star History
 
@@ -584,4 +569,8 @@ If you find this project helpful, please consider giving it a ⭐ on GitHub!
 
 ---
 
-**Made with ❤️ and AI**
+**Start planning smarter today!** 🚀
+
+```bash
+python -m streamlit run streamlit_app.py
+```

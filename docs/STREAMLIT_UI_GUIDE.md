@@ -636,4 +636,4 @@ Start simple, build habits, let the AI learn your patterns, and watch your produ
 **Need more help?** Check out:
 - [Multi-Provider Setup](MULTI_PROVIDER_README.md)
 - [Conversational Calendar Guide](CONVERSATIONAL_CALENDAR_README.md)
-- [Quick Start Guide](QUICKSTART.md)
+- [Quick Start Guide](../QUICKSTART.md)

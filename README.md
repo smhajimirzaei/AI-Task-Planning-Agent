@@ -96,12 +96,20 @@ python main.py plan
 
 ## 📚 Documentation
 
-- **[Streamlit UI Guide](STREAMLIT_README.md)** - Web interface documentation
-- **[Multi-Provider Setup](MULTI_PROVIDER_README.md)** - Claude, ChatGPT, Gemini configuration
-- **[Conversational Calendar](CONVERSATIONAL_CALENDAR_README.md)** - Text-based schedule sharing
+### Getting Started
 - **[Quick Start Guide](QUICKSTART.md)** - Get running in 5 minutes
-- **[Usage Guide](USAGE_GUIDE.md)** - Comprehensive CLI documentation
+- **[Complete Features](docs/FEATURES.md)** - Full feature list and capabilities
+
+### User Guides
+- **[Streamlit UI Guide](docs/STREAMLIT_UI_GUIDE.md)** - Web interface documentation
+- **[Conversational Calendar](docs/CONVERSATIONAL_CALENDAR_README.md)** - Text-based schedule sharing
+- **[Multi-Provider Setup](docs/MULTI_PROVIDER_README.md)** - Claude, ChatGPT, Gemini configuration
+- **[CLI Usage Guide](docs/USAGE_GUIDE.md)** - Command-line interface documentation
+
+### For Developers
 - **[Example Usage](example_usage.py)** - Code examples
+- **[Contributing](CONTRIBUTING.md)** - Contribution guidelines
+- **[Security](SECURITY.md)** - Security policy
 
 ## 💻 Installation
 
@@ -159,23 +167,37 @@ AI_Agent/
 ├── streamlit_app.py                    # Streamlit web UI (main interface)
 ├── main.py                             # CLI entry point
 ├── agent.py                            # Core agent logic
-├── models/                             # Data models
-│   ├── task.py                         # Task model
+│
+├── models/                             # Data models (Pydantic)
+│   ├── task.py                         # Task model with priorities & deadlines
 │   ├── calendar_event.py               # Calendar event model
-│   └── user_profile.py                 # User profile & preferences
-├── services/
-│   ├── ai_planner_multi.py            # Multi-provider AI service (NEW!)
-│   ├── text_calendar_service.py       # Conversational calendar (NEW!)
-│   ├── calendar_service.py            # External calendar integration
-│   └── preference_learner.py          # Learning engine
-├── database/
+│   └── user_profile.py                 # User profile & learned preferences
+│
+├── services/                           # Business logic services
+│   ├── ai_planner_multi.py            # Multi-provider AI service (Claude/ChatGPT/Gemini)
+│   ├── text_calendar_service.py       # Conversational calendar (no API needed)
+│   ├── calendar_service.py            # Optional external calendar integration
+│   └── preference_learner.py          # Adaptive learning engine
+│
+├── database/                           # Data persistence
 │   └── db_manager.py                   # SQLite database management
-├── config/
-│   └── settings.py                     # Configuration & settings
-└── docs/
-    ├── STREAMLIT_README.md             # Streamlit UI guide
-    ├── MULTI_PROVIDER_README.md        # Multi-provider setup
-    └── CONVERSATIONAL_CALENDAR_README.md  # Calendar guide
+│
+├── config/                             # Configuration
+│   └── settings.py                     # Settings & environment config
+│
+├── docs/                               # Detailed documentation
+│   ├── STREAMLIT_UI_GUIDE.md          # Complete UI guide
+│   ├── MULTI_PROVIDER_README.md       # AI provider setup
+│   ├── CONVERSATIONAL_CALENDAR_README.md  # Calendar guide
+│   ├── USAGE_GUIDE.md                 # CLI documentation
+│   └── FEATURES.md                    # Complete feature list
+│
+├── README.md                           # Main documentation (you are here)
+├── QUICKSTART.md                       # 5-minute getting started guide
+├── CONTRIBUTING.md                     # Contribution guidelines
+├── SECURITY.md                         # Security policy
+├── .env.example                        # Environment configuration template
+└── requirements.txt                    # Python dependencies
 ```
 
 ## 🎯 Usage

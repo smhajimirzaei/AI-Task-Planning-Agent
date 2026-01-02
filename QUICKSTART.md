@@ -259,7 +259,7 @@ Chat with the agent directly in terminal!
 - Full privacy - your actual calendar stays private
 - Update anytime with new text descriptions
 
-[Learn more →](CONVERSATIONAL_CALENDAR_README.md)
+[Learn more →](docs/CONVERSATIONAL_CALENDAR_README.md)
 
 ### 2. Multi-Provider AI
 
@@ -271,7 +271,7 @@ Chat with the agent directly in terminal!
 
 Switch anytime - your data persists!
 
-[Learn more →](MULTI_PROVIDER_README.md)
+[Learn more →](docs/MULTI_PROVIDER_README.md)
 
 ### 3. Weekly Reviews
 
@@ -444,10 +444,11 @@ py -3.13 -m streamlit run streamlit_app.py
 
 ## Get More Help
 
-- 📖 **Streamlit UI Guide**: [STREAMLIT_UI_GUIDE.md](STREAMLIT_UI_GUIDE.md)
-- 🤖 **Multi-Provider Setup**: [MULTI_PROVIDER_README.md](MULTI_PROVIDER_README.md)
-- 📅 **Calendar Guide**: [CONVERSATIONAL_CALENDAR_README.md](CONVERSATIONAL_CALENDAR_README.md)
-- 📘 **Full Documentation**: [USAGE_GUIDE.md](USAGE_GUIDE.md)
+- 📖 **Streamlit UI Guide**: [docs/STREAMLIT_UI_GUIDE.md](docs/STREAMLIT_UI_GUIDE.md)
+- 🤖 **Multi-Provider Setup**: [docs/MULTI_PROVIDER_README.md](docs/MULTI_PROVIDER_README.md)
+- 📅 **Calendar Guide**: [docs/CONVERSATIONAL_CALENDAR_README.md](docs/CONVERSATIONAL_CALENDAR_README.md)
+- 📘 **CLI Documentation**: [docs/USAGE_GUIDE.md](docs/USAGE_GUIDE.md)
+- 📋 **Complete Features**: [docs/FEATURES.md](docs/FEATURES.md)
 - 💻 **Code Examples**: [example_usage.py](example_usage.py)
 
 ## Try the Example

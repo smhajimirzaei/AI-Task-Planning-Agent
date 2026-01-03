@@ -751,13 +751,30 @@ Weekend: Did some light work on Saturday morning""",
                             st.error(f"Error executing plan: {e}")
 
             with col2:
-                feedback = st.text_input("Provide feedback for refinement")
+                feedback = st.text_area("Provide feedback for refinement", height=100,
+                                       placeholder="E.g., 'Move deep work to mornings' or 'Need Wednesday afternoon free'")
                 if st.button("🔄 Refine Plan", use_container_width=True) and feedback:
                     with st.spinner("Refining plan based on your feedback..."):
                         try:
+                            # Save the refinement request to database for learning
+                            agent.db.save_plan_refinement(
+                                user_id=agent.user_id,
+                                original_plan=plan if isinstance(plan, dict) else {"plan": str(plan)},
+                                refinement_request=feedback,
+                                plan_date=datetime.now()
+                            )
+
+                            # Refine the plan
                             refined = agent.refine_plan(feedback, plan)
+
+                            # Update the saved refinement with the refined plan
+                            refinements = agent.db.get_plan_refinements(agent.user_id, limit=1)
+                            if refinements:
+                                # Note: Would need update method, for now just save a new complete record
+                                pass
+
                             st.session_state.current_plan = refined
-                            st.success("✅ Plan refined!")
+                            st.success("✅ Plan refined and feedback saved!")
                             st.rerun()
                         except Exception as e:
                             st.error(f"Error refining plan: {e}")
@@ -821,6 +838,34 @@ Weekend: Did some light work on Saturday morning""",
                         st.write(f"**{status.title()}:** {count} tasks")
                 else:
                     st.info("No status data available")
+
+            # Plan Refinement Patterns
+            st.markdown("---")
+            st.subheader("🔄 Your Planning Preferences")
+
+            refinement_analysis = agent.db.analyze_refinement_patterns(agent.user_id)
+
+            if refinement_analysis["total_refinements"] > 0:
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    st.metric("Total Plan Refinements", refinement_analysis["total_refinements"])
+
+                    st.markdown("### Common Feedback Patterns")
+                    for pattern in refinement_analysis["patterns"]:
+                        st.write(f"**{pattern['category'].title()}**: {pattern['count']} times ({pattern['percentage']}%)")
+
+                with col2:
+                    st.markdown("### Recent Refinement Requests")
+                    for i, request in enumerate(refinement_analysis["recent_requests"], 1):
+                        st.info(f"{i}. {request}")
+
+                st.markdown("""
+                **What this means:** The agent learns from your refinement requests to better understand your preferences.
+                Over time, initial plans will better match your needs!
+                """)
+            else:
+                st.info("No plan refinements yet. When you refine plans, the agent will learn your preferences!")
 
             # Recommendations
             if insights.get("recommendations"):

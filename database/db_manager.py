@@ -86,6 +86,20 @@ class UserProfileDB(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
+class PlanRefinementDB(Base):
+    """Database model for Plan Refinements - tracks user feedback on plans."""
+    __tablename__ = "plan_refinements"
+
+    id = Column(String, primary_key=True)
+    user_id = Column(String, nullable=False)
+    original_plan = Column(Text)  # JSON of original plan
+    refinement_request = Column(Text, nullable=False)  # What user asked to change
+    refined_plan = Column(Text)  # JSON of refined plan
+    feedback_category = Column(String)  # e.g., "timing", "workload", "preferences"
+    plan_date = Column(DateTime)  # When the plan was for
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 class DatabaseManager:
     """Manages database operations."""
 
@@ -327,3 +341,113 @@ class DatabaseManager:
             created_at=profile_db.created_at,
             updated_at=profile_db.updated_at,
         )
+
+    # Plan Refinement operations
+    def save_plan_refinement(
+        self,
+        user_id: str,
+        original_plan: dict,
+        refinement_request: str,
+        refined_plan: dict = None,
+        feedback_category: str = None,
+        plan_date: datetime = None
+    ) -> str:
+        """Save a plan refinement to track user feedback."""
+        session = self.get_session()
+        try:
+            refinement_id = f"refinement_{datetime.utcnow().timestamp()}"
+
+            refinement_db = PlanRefinementDB(
+                id=refinement_id,
+                user_id=user_id,
+                original_plan=json.dumps(original_plan),
+                refinement_request=refinement_request,
+                refined_plan=json.dumps(refined_plan) if refined_plan else None,
+                feedback_category=feedback_category,
+                plan_date=plan_date or datetime.utcnow(),
+                created_at=datetime.utcnow()
+            )
+
+            session.add(refinement_db)
+            session.commit()
+            return refinement_id
+        finally:
+            session.close()
+
+    def get_plan_refinements(
+        self,
+        user_id: str,
+        limit: int = None,
+        category: str = None
+    ) -> List[dict]:
+        """Retrieve plan refinements for a user."""
+        session = self.get_session()
+        try:
+            query = session.query(PlanRefinementDB).filter_by(user_id=user_id)
+
+            if category:
+                query = query.filter_by(feedback_category=category)
+
+            query = query.order_by(PlanRefinementDB.created_at.desc())
+
+            if limit:
+                query = query.limit(limit)
+
+            refinements_db = query.all()
+
+            return [
+                {
+                    "id": r.id,
+                    "user_id": r.user_id,
+                    "original_plan": json.loads(r.original_plan) if r.original_plan else None,
+                    "refinement_request": r.refinement_request,
+                    "refined_plan": json.loads(r.refined_plan) if r.refined_plan else None,
+                    "feedback_category": r.feedback_category,
+                    "plan_date": r.plan_date,
+                    "created_at": r.created_at
+                }
+                for r in refinements_db
+            ]
+        finally:
+            session.close()
+
+    def analyze_refinement_patterns(self, user_id: str) -> dict:
+        """Analyze common patterns in user's plan refinements."""
+        refinements = self.get_plan_refinements(user_id, limit=50)
+
+        if not refinements:
+            return {"total_refinements": 0, "patterns": []}
+
+        # Categorize refinements
+        categories = {}
+        common_keywords = {
+            "timing": ["morning", "afternoon", "evening", "time", "earlier", "later"],
+            "workload": ["too much", "too many", "reduce", "less", "more", "add"],
+            "preferences": ["prefer", "like", "want", "need", "better"],
+            "scheduling": ["move", "shift", "reschedule", "change"],
+        }
+
+        for ref in refinements:
+            request_lower = ref["refinement_request"].lower()
+
+            # Auto-categorize if not already categorized
+            if not ref.get("feedback_category"):
+                for category, keywords in common_keywords.items():
+                    if any(keyword in request_lower for keyword in keywords):
+                        categories[category] = categories.get(category, 0) + 1
+                        break
+            else:
+                cat = ref["feedback_category"]
+                categories[cat] = categories.get(cat, 0) + 1
+
+        # Find most common patterns
+        sorted_patterns = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+
+        return {
+            "total_refinements": len(refinements),
+            "patterns": [
+                {"category": cat, "count": count, "percentage": round(count / len(refinements) * 100, 1)}
+                for cat, count in sorted_patterns
+            ],
+            "recent_requests": [r["refinement_request"] for r in refinements[:5]]
+        }
